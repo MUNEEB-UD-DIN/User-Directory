@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const baseApi = "https://reqres.in/api/users";
   const proxy = "https://corsproxy.io/?";
-  const apiUrl = proxy + encodeURIComponent(baseApi);
 
   const userList = document.getElementById("userList");
   const pagination = document.getElementById("pagination");
@@ -16,11 +15,12 @@ document.addEventListener("DOMContentLoaded", () => {
   let totalPages = 1;
   let usersData = [];
 
-  // Load users
+  // Fetch users
   async function fetchUsers(page = 1) {
     showLoader(true);
     try {
-      const res = await fetch(`${apiUrl}%3Fpage%3D${page}`);
+      const fullUrl = `${proxy}${encodeURIComponent(`${baseApi}?page=${page}`)}`;
+      const res = await fetch(fullUrl);
       const data = await res.json();
       usersData = data.data;
       totalPages = data.total_pages;
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Pagination
+  // Render pagination
   function renderPagination(page) {
     pagination.innerHTML = `
       <button ${page === 1 ? "disabled" : ""} onclick="changePage(${page - 1})">Prev</button>
@@ -96,13 +96,14 @@ document.addEventListener("DOMContentLoaded", () => {
       let response, user;
 
       if (id) {
-        // Edit
+        // Edit user
         response = await fetch(`${proxy}${encodeURIComponent(`${baseApi}/${id}`)}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
         user = await response.json();
+
         const index = usersData.findIndex((u) => u.id == id);
         if (index !== -1) {
           usersData[index].first_name = first_name;
@@ -112,13 +113,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         alert("User updated!");
       } else {
-        // Add
+        // Add user
         response = await fetch(`${proxy}${encodeURIComponent(baseApi)}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
         user = await response.json();
+
         const newUser = {
           id: user.id || Date.now(),
           first_name,
@@ -139,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Edit
+  // Edit user
   window.editUser = (id) => {
     const user = usersData.find((u) => u.id == id);
     if (!user) return;
@@ -150,7 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("submitBtn").textContent = "Update User";
   };
 
-  // Delete
+  // Delete user
   window.deleteUser = async (id) => {
     try {
       await fetch(`${proxy}${encodeURIComponent(`${baseApi}/${id}`)}`, {
@@ -189,6 +191,6 @@ document.addEventListener("DOMContentLoaded", () => {
     loader.style.display = show ? "block" : "none";
   }
 
-  // Initial fetch
+  // Initial load
   fetchUsers();
 });
