@@ -1,0 +1,299 @@
+/* ========== Base Reset ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ========== Body Styling ========== */
+body {
+  background: linear-gradient(120deg, #9fa4a9, #f0f8ff);
+  background-size: 400% 400%;
+  animation: gradientBG 10s ease infinite;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ========== Container ========== */
+.container {
+  max-width: 900px;
+  width: 100%;
+  background: linear-gradient(120deg, #778ca0, #583972);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* ========== Title ========== */
+.container h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #1a202c;
+}
+
+/* ========== Search Input ========== */
+#searchInput {
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: border 0.3s;
+}
+
+#searchInput:focus {
+  border-color: #4a90e2;
+  outline: none;
+}
+
+/* ========== Form ========== */
+#userForm {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+}
+
+#userForm input {
+  flex: 1 1 200px;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: border-color 0.3s;
+}
+
+#userForm input:focus {
+  border-color: #4a90e2;
+  outline: none;
+}
+
+#userForm button {
+  padding: 12px 20px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+#userForm button:hover {
+  background-color: #357ac8;
+}
+
+/* ========== Loader ========== */
+.loader {
+  text-align: center;
+  font-size: 10px;
+  padding: 20px;
+  color: #0a0a0a;
+}
+
+/* ========== User Cards ========== */
+.user-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.user-card {
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s;
+}
+
+.user-card:hover {
+  transform: translateY(-5px);
+}
+
+.user-card img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  object-fit: cover;
+  border: 3px solid #4a90e2;
+}
+
+.user-card p {
+  margin: 5px 0;
+  font-size: 15px;
+}
+
+/* ========== Card Buttons ========== */
+.card-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.card-buttons button {
+  padding: 8px 14px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-btn {
+  background-color: #38a169;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #2f855a;
+}
+
+.delete-btn {
+  background-color: #e53e3e;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #c53030;
+}
+
+/* ========== User Card Action Buttons ========== */
+.user-card .actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.user-card .actions button {
+  padding: 6px 12px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s;
+}
+
+.user-card .actions button:first-child {
+  background-color: #3b82f6;
+  color: #fff;
+}
+
+.user-card .actions button:last-child {
+  background-color: #ef4444;
+  color: #fff;
+}
+
+.user-card .actions button:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* ========== Pagination ========== */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
+  gap: 10px;
+  padding-bottom: 30px;
+}
+
+.pagination button {
+  padding: 10px 16px;
+  border: none;
+  background-color: #4a90e2;
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.pagination button:hover {
+  background-color: #357ac8;
+}
+
+/* ========== Modal Styling ========== */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  position: relative;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+.modal-content h2 {
+  margin: 10px 0 5px;
+  font-size: 24px;
+  color: #333;
+}
+
+.modal-content p {
+  margin: 5px 0;
+  color: #666;
+}
+
+.modal .close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.modal .close:hover {
+  color: #e74c3c;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
