@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
   const baseApi = "https://reqres.in/api/users";
-  const proxy = "https://corsproxy.io/?";
 
   const userList = document.getElementById("userList");
   const pagination = document.getElementById("pagination");
@@ -19,15 +18,16 @@ document.addEventListener("DOMContentLoaded", () => {
   async function fetchUsers(page = 1) {
     showLoader(true);
     try {
-      const fullUrl = `${proxy}${encodeURIComponent(`${baseApi}?page=${page}`)}`;
-      const res = await fetch(fullUrl);
+      const res = await fetch(`${baseApi}?page=${page}`);
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       const data = await res.json();
       usersData = data.data;
       totalPages = data.total_pages;
       renderUsers(usersData);
       renderPagination(page);
     } catch (err) {
-      alert("Error fetching users.");
+      console.error("Fetch error:", err);
+      alert("Error fetching users: " + err.message);
     }
     showLoader(false);
   }
@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (id) {
         // Edit user
-        response = await fetch(`${proxy}${encodeURIComponent(`${baseApi}/${id}`)}`, {
+        response = await fetch(`${baseApi}/${id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("User updated!");
       } else {
         // Add user
-        response = await fetch(`${proxy}${encodeURIComponent(baseApi)}`, {
+        response = await fetch(baseApi, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
@@ -136,8 +136,9 @@ document.addEventListener("DOMContentLoaded", () => {
       userForm.reset();
       userIdInput.value = "";
       document.getElementById("submitBtn").textContent = "Add User";
-    } catch {
-      alert("Error processing request.");
+    } catch (err) {
+      console.error("Error processing request:", err);
+      alert("Error processing request: " + err.message);
     }
   });
 
@@ -155,14 +156,15 @@ document.addEventListener("DOMContentLoaded", () => {
   // Delete user
   window.deleteUser = async (id) => {
     try {
-      await fetch(`${proxy}${encodeURIComponent(`${baseApi}/${id}`)}`, {
+      await fetch(`${baseApi}/${id}`, {
         method: "DELETE",
       });
       usersData = usersData.filter((u) => u.id !== id);
       renderUsers(usersData);
       alert("User deleted!");
-    } catch {
-      alert("Error deleting user.");
+    } catch (err) {
+      console.error("Error deleting user:", err);
+      alert("Error deleting user: " + err.message);
     }
   };
 
