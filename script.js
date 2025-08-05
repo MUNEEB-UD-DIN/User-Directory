@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const apiUrl = "https://reqres.in/api/users";
+  const baseApi = "https://reqres.in/api/users";
+  const proxy = "https://corsproxy.io/?";
+  const apiUrl = proxy + encodeURIComponent(baseApi);
+
   const userList = document.getElementById("userList");
   const pagination = document.getElementById("pagination");
   const loader = document.getElementById("loader");
@@ -17,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function fetchUsers(page = 1) {
     showLoader(true);
     try {
-      const res = await fetch(`${apiUrl}?page=${page}`);
+      const res = await fetch(`${apiUrl}%3Fpage%3D${page}`);
       const data = await res.json();
       usersData = data.data;
       totalPages = data.total_pages;
@@ -94,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (id) {
         // Edit
-        response = await fetch(`${apiUrl}/${id}`, {
+        response = await fetch(`${proxy}${encodeURIComponent(`${baseApi}/${id}`)}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
@@ -110,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("User updated!");
       } else {
         // Add
-        response = await fetch(apiUrl, {
+        response = await fetch(`${proxy}${encodeURIComponent(baseApi)}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
@@ -150,7 +153,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // Delete
   window.deleteUser = async (id) => {
     try {
-      await fetch(`${apiUrl}/${id}`, { method: "DELETE" });
+      await fetch(`${proxy}${encodeURIComponent(`${baseApi}/${id}`)}`, {
+        method: "DELETE",
+      });
       usersData = usersData.filter((u) => u.id !== id);
       renderUsers(usersData);
       alert("User deleted!");
