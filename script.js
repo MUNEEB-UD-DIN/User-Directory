@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const baseApi = "https://reqres.in/api/users";
+  const API_KEY = "reqres-free-v1"; // The free API key
 
   const userList = document.getElementById("userList");
   const pagination = document.getElementById("pagination");
@@ -14,11 +15,16 @@ document.addEventListener("DOMContentLoaded", () => {
   let totalPages = 1;
   let usersData = [];
 
-  // Fetch users
+  // Fetch users with API key
   async function fetchUsers(page = 1) {
     showLoader(true);
     try {
-      const res = await fetch(`${baseApi}?page=${page}`);
+      const res = await fetch(`${baseApi}?page=${page}`, {
+        headers: {
+          "x-api-key": API_KEY,
+          "Content-Type": "application/json"
+        }
+      });
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       const data = await res.json();
       usersData = data.data;
@@ -32,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
     showLoader(false);
   }
 
-  // Render users
+  // Render users (unchanged)
   function renderUsers(users) {
     userList.innerHTML = "";
     users.forEach((user) => {
@@ -54,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Render pagination
+  // Render pagination (unchanged)
   function renderPagination(page) {
     pagination.innerHTML = `
       <button ${page === 1 ? "disabled" : ""} onclick="changePage(${page - 1})">Prev</button>
@@ -70,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // Search
+  // Search (unchanged)
   searchInput.addEventListener("input", () => {
     const term = searchInput.value.toLowerCase();
     const filtered = usersData.filter((u) =>
@@ -79,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderUsers(filtered);
   });
 
-  // Add/Edit user
+  // Add/Edit user with API key
   userForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const id = userIdInput.value;
@@ -99,7 +105,10 @@ document.addEventListener("DOMContentLoaded", () => {
         // Edit user
         response = await fetch(`${baseApi}/${id}`, {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: { 
+            "Content-Type": "application/json",
+            "x-api-key": API_KEY
+          },
           body: JSON.stringify(payload),
         });
         user = await response.json();
@@ -116,7 +125,10 @@ document.addEventListener("DOMContentLoaded", () => {
         // Add user
         response = await fetch(baseApi, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { 
+            "Content-Type": "application/json",
+            "x-api-key": API_KEY
+          },
           body: JSON.stringify(payload),
         });
         user = await response.json();
@@ -142,7 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Edit user
+  // Edit user (unchanged)
   window.editUser = (id) => {
     const user = usersData.find((u) => u.id == id);
     if (!user) return;
@@ -153,11 +165,14 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("submitBtn").textContent = "Update User";
   };
 
-  // Delete user
+  // Delete user with API key
   window.deleteUser = async (id) => {
     try {
       await fetch(`${baseApi}/${id}`, {
         method: "DELETE",
+        headers: {
+          "x-api-key": API_KEY
+        }
       });
       usersData = usersData.filter((u) => u.id !== id);
       renderUsers(usersData);
@@ -168,7 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // Modal
+  // Modal (unchanged)
   window.openModal = (user) => {
     const modal = document.createElement("div");
     modal.className = "modal";
@@ -188,7 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   };
 
-  // Loader toggle
+  // Loader toggle (unchanged)
   function showLoader(show) {
     loader.style.display = show ? "block" : "none";
   }
